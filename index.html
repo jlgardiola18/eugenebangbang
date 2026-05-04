@@ -49,13 +49,13 @@
         playerImg.src = "player.png";
 
         const zombieImg = new Image();
-        zombieImg.src = "zombie.png"; // simple zombie sprite
+        zombieImg.src = "zombie.png"; // use your local zombie file // simple zombie sprite
 
         const player = {
             x: canvas.width / 2,
             y: canvas.height / 2,
-            w: 60,
-            h: 80,
+            w: 120, // increased size
+            h: 160, // increased size
             speed: 4,
             hp: 100
         };
@@ -73,7 +73,7 @@
             enemies.push({
                 x: canvas.width + 50,
                 y: Math.random() * canvas.height,
-                size: 50,
+                size: 100, // larger zombie size
                 speed: 1 + Math.random() * 1.5
             });
         }
@@ -87,17 +87,23 @@
             const mouseX = e.clientX - rect.left;
             const mouseY = e.clientY - rect.top;
 
-            const dx = mouseX - (player.x + player.w / 2);
-            const dy = mouseY - (player.y + player.h / 2);
-            const dist = Math.hypot(dx, dy);
+            const startX = player.x + player.w / 2;
+            const startY = player.y + player.h / 2;
+
+            let dx = mouseX - startX;
+            let dy = mouseY - startY;
+
+            let dist = Math.hypot(dx, dy);
+            if (dist === 0) dist = 1; // prevent bug
 
             bullets.push({
-                x: player.x + player.w / 2,
-                y: player.y + player.h / 2,
-                dx: dx / dist * 7,
-                dy: dy / dist * 7
+                x: startX,
+                y: startY,
+                dx: (dx / dist) * 8,
+                dy: (dy / dist) * 8
             });
         });
+
 
         function update() {
             // movement
